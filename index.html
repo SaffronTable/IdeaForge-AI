@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IdeaForge AI — Business Idea Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <!-- ===== API KEY GATE ===== -->
+  <div class="gate-overlay" id="gateOverlay">
+    <div class="gate-card">
+      <div class="gate-icon">⚡</div>
+      <h2 class="gate-title">Connect Your AI</h2>
+      <p class="gate-subtitle">Uses <strong style="color:var(--accent-green)">Google Gemini — 100% Free</strong>.<br/>No credit card needed. Just your Google account.</p>
+      <div class="gate-steps">
+        <div class="gate-step"><span class="step-dot">1</span> Tap the link below → Sign in with Google</div>
+        <div class="gate-step"><span class="step-dot">2</span> Click <strong>"Get API Key"</strong> → <strong>"Create API Key"</strong></div>
+        <div class="gate-step"><span class="step-dot">3</span> Copy &amp; paste the key below</div>
+      </div>
+      <div class="key-input-wrap">
+        <input type="password" id="apiKeyInput" placeholder="AIza..." class="key-input" autocomplete="off" />
+        <button class="key-toggle" id="keyToggle" onclick="toggleKeyVisibility()" title="Show/Hide">👁</button>
+      </div>
+      <p class="gate-note">🔒 Stored only in your browser. Never shared with anyone.</p>
+      <button class="btn-primary gate-btn" onclick="saveApiKey()">Launch IdeaForge →</button>
+      <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="gate-link">👉 Get FREE API key from Google AI Studio ↗</a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">IdeaForge <span class="logo-ai">AI</span></span>
+      </div>
+      <div class="header-actions">
+        <span class="ai-badge">Powered by Gemini (Free)</span>
+        <button class="btn-ghost" onclick="openSaved()" id="savedBtn">
+          <span class="saved-icon">🔖</span>
+          <span id="savedCount">0</span> Saved
+        </button>
+        <button class="btn-ghost key-reset-btn" onclick="resetApiKey()" title="Reset API Key">🔑 Reset Key</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-tag">AI-Powered Startup Intelligence</div>
+      <h1 class="hero-title">
+        Generate <span class="gradient-text">Winning</span><br />
+        Business Ideas
+      </h1>
+      <p class="hero-sub">Fill in your context below and let Claude craft 3 deeply researched, market-aware business ideas — complete with revenue models, startup costs, and action steps.</p>
+    </section>
+
+    <!-- Input Form -->
+    <section class="form-section" id="formSection">
+      <div class="form-card">
+        <div class="form-grid">
+
+          <!-- Row 1 -->
+          <div class="field-group">
+            <label class="field-label">🏭 Industry / Niche</label>
+            <input type="text" id="industry" class="field-input" placeholder="e.g. Food tech, EdTech, Fitness, Fintech" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">🌍 Target Market / Country</label>
+            <input type="text" id="country" class="field-input" placeholder="e.g. India, Southeast Asia, USA" />
+          </div>
+
+          <!-- Row 2 -->
+          <div class="field-group">
+            <label class="field-label">👥 Target Customers</label>
+            <input type="text" id="audience" class="field-input" placeholder="e.g. College students, SME owners, Freelancers" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">💰 Your Budget Range</label>
+            <select id="budget" class="field-input field-select">
+              <option value="">Select budget range</option>
+              <option value="Zero to minimal (bootstrapped, under ₹50K / $500)">Zero / Bootstrap (under ₹50K)</option>
+              <option value="Low (₹50K–₹5L / $500–$5K)">Low (₹50K – ₹5L)</option>
+              <option value="Medium (₹5L–₹50L / $5K–$50K)">Medium (₹5L – ₹50L)</option>
+              <option value="High (₹50L+ / $50K+)">High (₹50L+)</option>
+            </select>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="field-group">
+            <label class="field-label">🧠 Your Skills / Background</label>
+            <input type="text" id="skills" class="field-input" placeholder="e.g. Design, Sales, Coding, Hospitality, Marketing" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">📐 Preferred Business Model</label>
+            <select id="model" class="field-input field-select">
+              <option value="">Any / Let AI decide</option>
+              <option value="SaaS (software subscription)">SaaS / Subscription</option>
+              <option value="Marketplace / Platform">Marketplace / Platform</option>
+              <option value="D2C / E-commerce">D2C / E-commerce</option>
+              <option value="Agency / Service">Agency / Service</option>
+              <option value="Content / Creator Economy">Content / Creator Economy</option>
+              <option value="Consulting / Freelance">Consulting / Freelance</option>
+              <option value="Physical / Offline Business">Physical / Offline</option>
+            </select>
+          </div>
+
+          <!-- Row 4 Full Width -->
+          <div class="field-group field-full">
+            <label class="field-label">✨ Unique Insight or Problem You've Noticed <span class="optional">(optional but powerful)</span></label>
+            <textarea id="insight" class="field-input field-textarea" placeholder="e.g. Most restaurants in tier-2 cities have no digital presence. I've seen this first-hand working in hospitality..."></textarea>
+          </div>
+
+          <!-- Idea count -->
+          <div class="field-group field-full tone-row">
+            <label class="field-label">🎯 Number of Ideas</label>
+            <div class="count-pills">
+              <button class="pill active" data-count="3" onclick="setCount(this)">3 Ideas</button>
+              <button class="pill" data-count="5" onclick="setCount(this)">5 Ideas</button>
+            </div>
+            <label class="field-label" style="margin-left:32px;">🔬 Detail Level</label>
+            <div class="count-pills">
+              <button class="pill" data-detail="concise" onclick="setDetail(this)">Concise</button>
+              <button class="pill active" data-detail="detailed" onclick="setDetail(this)">Detailed</button>
+              <button class="pill" data-detail="deep-dive" onclick="setDetail(this)">Deep Dive</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-footer">
+          <button class="btn-generate" id="generateBtn" onclick="generateIdeas()">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text">Generate Ideas with AI</span>
+          </button>
+          <button class="btn-ghost btn-clear" onclick="clearForm()">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <section class="loading-section" id="loadingSection" style="display:none;">
+      <div class="loading-card">
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <p class="loading-title">Claude is thinking...</p>
+        <p class="loading-sub" id="loadingMsg">Analyzing market opportunities in your sector</p>
+        <div class="loading-bar"><div class="loading-fill" id="loadingFill"></div></div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="results-section" id="resultsSection" style="display:none;">
+      <div class="results-header">
+        <h2 class="results-title">Your Business Ideas</h2>
+        <div class="results-actions">
+          <button class="btn-ghost" onclick="exportIdeas()">📥 Export</button>
+          <button class="btn-ghost" onclick="regenerate()">🔄 Regenerate</button>
+        </div>
+      </div>
+      <div class="ideas-grid" id="ideasGrid"></div>
+    </section>
+
+    <!-- Error State -->
+    <section class="error-section" id="errorSection" style="display:none;">
+      <div class="error-card">
+        <div class="error-icon">⚠️</div>
+        <h3 class="error-title">Something went wrong</h3>
+        <p class="error-msg" id="errorMsg"></p>
+        <button class="btn-primary" onclick="generateIdeas()">Try Again</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== SAVED IDEAS PANEL ===== -->
+  <div class="saved-overlay" id="savedOverlay" onclick="closeSaved(event)"></div>
+  <aside class="saved-panel" id="savedPanel">
+    <div class="saved-header">
+      <h3>🔖 Saved Ideas</h3>
+      <button class="panel-close" onclick="closeSaved()">✕</button>
+    </div>
+    <div class="saved-list" id="savedList"></div>
+    <div class="saved-empty" id="savedEmpty">
+      <p>No saved ideas yet.<br/>Click 🔖 on any idea to save it.</p>
+    </div>
+    <div class="saved-footer" id="savedFooter" style="display:none;">
+      <button class="btn-ghost btn-sm" onclick="exportSaved()">📥 Export Saved</button>
+      <button class="btn-ghost btn-sm" onclick="clearSaved()">🗑 Clear All</button>
+    </div>
+  </aside>
+
+  <!-- ===== IDEA MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-card" id="modalCard">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
